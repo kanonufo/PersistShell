@@ -34,3 +34,11 @@ El módulo escaneará todos los procesos en el sistema y detectará aquellos que
 Para los procesos que hayan ejecutado shellcode, establecerá la persistencia mediante la creación de una tarea programada.
 
 ¡Y eso es todo! Ahora puedes utilizar el módulo PersistShell para detectar ejecuciones de shellcode y establecer persistencia en sistemas comprometidos a través de Cobalt Strike.
+
+
+
+Aviso Legal:
+
+El uso de esta herramienta es responsabilidad del usuario. El autor y los colaboradores de esta herramienta no son responsables de ningún daño directo o indirecto que pueda resultar del uso de esta herramienta. Esta herramienta se proporciona "tal cual", sin garantías de ningún tipo, ya sean expresas o implícitas, incluidas, entre otras, las garantías de comerciabilidad, idoneidad para un propósito particular y no infracción. El usuario asume todos los riesgos asociados con el uso de esta herramienta. Se recomienda encarecidamente utilizar esta herramienta solo con fines legales y éticos, como parte de pruebas de seguridad autorizadas o actividades de investigación. El uso de esta herramienta para fines ilegales o maliciosos está estrictamente prohibido.
+
+

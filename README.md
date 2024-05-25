@@ -24,8 +24,13 @@ El módulo PersistShell ofrece una poderosa herramienta para detectar la ejecuci
 
 Uso:
 Descarga el archivo PersistShell.cna del repositorio.
+
 Abre Cobalt Strike y carga el script Aggressor Script PersistShell.cna.
+
 Una vez cargado, puedes ejecutar el módulo desde el menú "Scripts" en Cobalt Strike.
+
 El módulo escaneará todos los procesos en el sistema y detectará aquellos que hayan ejecutado shellcode.
+
 Para los procesos que hayan ejecutado shellcode, establecerá la persistencia mediante la creación de una tarea programada.
+
 ¡Y eso es todo! Ahora puedes utilizar el módulo PersistShell para detectar ejecuciones de shellcode y establecer persistencia en sistemas comprometidos a través de Cobalt Strike.
